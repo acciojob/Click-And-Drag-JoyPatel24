@@ -36,31 +36,21 @@
 
 <script>
 //Your code goes here 
-	const itemsContainer = document.querySelector('.items');
-    let isDragging = false;
-    let startX, scrollLeft;
+	// test.spec.js
+describe('Click and Drag Test', () => {
+  it('should slide to subsequent cubes on click and drag', () => {
+    cy.visit('/main.html');
 
-    itemsContainer.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.pageX - itemsContainer.offsetLeft;
-      scrollLeft = itemsContainer.scrollLeft;
-    });
+    // Simulate the click and drag behavior
+    cy.get('.items')
+      .trigger('mousedown', { which: 1, pageX: 493, pageY: 391 })
+      .trigger('mousemove', { which: 1, pageX: 271, pageY: 391 })
+      .trigger('mouseup');
 
-    itemsContainer.addEventListener('mouseleave', () => {
-      isDragging = false;
-    });
-
-    itemsContainer.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    itemsContainer.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      const x = e.pageX - itemsContainer.offsetLeft;
-      const walk = (x - startX) * 2; // You can adjust the sliding speed here
-      itemsContainer.scrollLeft = scrollLeft - walk;
-    });
+    // Check if the container has scrolled to the right
+    cy.get('.items').should('have.prop', 'scrollLeft').and('be.greaterThan', 0);
+  });
+});
 
 </script>
 
