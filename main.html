@@ -36,6 +36,46 @@
 
 <script>
 //Your code goes here 
+	let isDragging = false;
+    let dragStartX, dragEndX;
+
+    const cubes = document.querySelectorAll('.cube');
+
+    // Function to handle mouse down event (click)
+    function handleMouseDown(event) {
+      isDragging = true;
+      dragStartX = event.clientX;
+    }
+
+    // Function to handle mouse move event (drag)
+    function handleMouseMove(event) {
+      if (!isDragging) return;
+      dragEndX = event.clientX;
+      const dragDistance = dragEndX - dragStartX;
+
+      // Move the cubes horizontally based on drag distance
+      cubes.forEach(cube => {
+        const currentLeft = parseInt(window.getComputedStyle(cube).left);
+        cube.style.left = currentLeft + dragDistance + 'px';
+      });
+
+      dragStartX = dragEndX;
+    }
+
+    // Function to handle mouse up event (release click)
+    function handleMouseUp() {
+      isDragging = false;
+    }
+
+    // Add event listeners to each cube
+    cubes.forEach(cube => {
+      cube.addEventListener('mousedown', handleMouseDown);
+    });
+
+    // Add event listeners to the whole window for move and up events
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
 </script>
 
   </body>
