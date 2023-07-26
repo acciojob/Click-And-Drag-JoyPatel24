@@ -36,45 +36,31 @@
 
 <script>
 //Your code goes here 
-	let isDragging = false;
-    let dragStartX, dragEndX;
+	const itemsContainer = document.querySelector('.items');
+    let isDragging = false;
+    let startX, scrollLeft;
 
-    const cubes = document.querySelectorAll('.cube');
-
-    // Function to handle mouse down event (click)
-    function handleMouseDown(event) {
+    itemsContainer.addEventListener('mousedown', (e) => {
       isDragging = true;
-      dragStartX = event.clientX;
-    }
-
-    // Function to handle mouse move event (drag)
-    function handleMouseMove(event) {
-      if (!isDragging) return;
-      dragEndX = event.clientX;
-      const dragDistance = dragEndX - dragStartX;
-
-      // Move the cubes horizontally based on drag distance
-      cubes.forEach(cube => {
-        const currentLeft = parseInt(window.getComputedStyle(cube).left);
-        cube.style.left = currentLeft + dragDistance + 'px';
-      });
-
-      dragStartX = dragEndX;
-    }
-
-    // Function to handle mouse up event (release click)
-    function handleMouseUp() {
-      isDragging = false;
-    }
-
-    // Add event listeners to each cube
-    cubes.forEach(cube => {
-      cube.addEventListener('mousedown', handleMouseDown);
+      startX = e.pageX - itemsContainer.offsetLeft;
+      scrollLeft = itemsContainer.scrollLeft;
     });
 
-    // Add event listeners to the whole window for move and up events
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    itemsContainer.addEventListener('mouseleave', () => {
+      isDragging = false;
+    });
+
+    itemsContainer.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    itemsContainer.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - itemsContainer.offsetLeft;
+      const walk = (x - startX) * 2; // You can adjust the sliding speed here
+      itemsContainer.scrollLeft = scrollLeft - walk;
+    });
 
 </script>
 
