@@ -36,24 +36,32 @@
 
 <script>
 //Your code goes here 
-	// test.spec.js
-describe('Click and Drag Test', () => {
-  it('should slide to subsequent cubes on click and drag', () => {
-    cy.visit('/main.html');
+	const itemsContainer = document.querySelector('.items');
+    let isDragging = false;
+    let dragStartX, scrollStartX;
 
-    // Simulate the click and drag behavior
-    cy.get('.items')
-      .trigger('mousedown', { which: 1, pageX: 493, pageY: 391 })
-      .trigger('mousemove', { which: 1, pageX: 271, pageY: 391 })
-      .trigger('mouseup');
+    itemsContainer.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
 
-    // Check if the container has scrolled to the right
-    cy.get('.items').should($items => {
-      expect($items[0].scrollLeft).to.be.greaterThan(0);
-    });
-  });
-});
+    // Function to handle mouse down event (click)
+    function handleMouseDown(event) {
+      isDragging = true;
+      dragStartX = event.clientX;
+      scrollStartX = itemsContainer.scrollLeft;
+    }
 
+    // Function to handle mouse move event (drag)
+    function handleMouseMove(event) {
+      if (!isDragging) return;
+      const dragDistance = event.clientX - dragStartX;
+      itemsContainer.scrollLeft = scrollStartX - dragDistance;
+    }
+
+    // Function to handle mouse up event (release click)
+    function handleMouseUp() {
+      isDragging = false;
+    }
 </script>
 
   </body>
