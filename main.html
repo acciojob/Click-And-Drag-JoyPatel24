@@ -48,7 +48,9 @@ describe('Click and Drag Test', () => {
       .trigger('mouseup');
 
     // Check if the container has scrolled to the right
-    cy.get('.items').should('have.prop', 'scrollLeft').and('be.greaterThan', 0);
+    cy.get('.items').should($items => {
+      expect($items[0].scrollLeft).to.be.greaterThan(0);
+    });
   });
 });
 
